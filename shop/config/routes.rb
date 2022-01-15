@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  scope(:path => '/api') do
+    resources :category
+    get '/*admin.php', to: redirect('https://www.youtube.com/watch?v=dPWkNS5AMVM')
+  end
 end
