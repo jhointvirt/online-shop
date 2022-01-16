@@ -1,16 +1,47 @@
 class ItemController < ApplicationController
   def index
+    render json: Item.all
   end
 
   def show
+    render json: Item.find(params[:id])
   end
 
   def create
+    item = Item.new(item_params)
+    if item.save
+      render json: { message: 'Create success', result: item }, status: 201
+    else
+      render json: { result: item }, status: 400
+    end
   end
 
   def update
+    item = Item.find(params[:id])
+    unless item
+      render json: { message: 'Item cannot find' }, status: 404
+    end
+
+    result = item.update(item_params)
+    if result
+      render json: { message: 'Update success', result: result }, status: 200
+    else
+      render json: { result: result }, status: 400
+    end
   end
 
   def destroy
+    result = Item.delete(params[:id])
+    if result
+      render json: { message: 'Delete success', result: result }, status: 200
+    else
+      render json: { result: result }, status: 400
+    end
+  end
+
+  private
+
+  def item_params
+    params.require(:item).permit(:title, :description, :price, :category_id)
   end
 end

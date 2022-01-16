@@ -8,7 +8,7 @@ class CategoryController < ApplicationController
   end
 
   def create
-    category = Category.where(id: params[:ancestry]).first
+    category = Category.find(params[:ancestry])
     if category
       params[:category][:ancestry] = "#{category.ancestry}/#{params[:ancestry]}"
     end
@@ -17,14 +17,31 @@ class CategoryController < ApplicationController
     if category.save
       render json: { message: 'Create success', result: category }, status: 201
     else
-      render json: { message: category.errors.full_message }, status: 400
+      render json: { result: category }, status: 400
     end
   end
 
   def update
+    category = Category.find(params[:id])
+    unless category
+      render json: { message: 'Category cannot find' }, status: 404
+    end
+
+    result = category.update(category_params)
+    if result
+      render json: { message: 'Update success', result: result }, status: 200
+    else
+      render json: { result: result }, status: 400
+    end
   end
 
   def destroy
+    result = Category.delete(params[:id])
+    if result
+      render json: { message: 'Delete success', result: result }, status: 200
+    else
+      render json: { result: result }, status: 400
+    end
   end
 
   private
