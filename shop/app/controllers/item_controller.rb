@@ -1,10 +1,20 @@
 class ItemController < ApplicationController
   def index
-    render json: Item.all
+    render json: Item.all, status: 200
   end
 
   def show
-    render json: Item.find(params[:id])
+    render json: Item.find(params[:id]), status: 200
+  end
+
+  def items_by_category
+    categories = Category.find(params[:category_id]).descendant_ids
+    items = Item.where(category_id: params[:category_id])
+    if categories
+      items = items + Item.where(category_id: categories)
+    end
+
+    render json: items, status: 200
   end
 
   def create
