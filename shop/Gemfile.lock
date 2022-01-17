@@ -114,6 +114,7 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.0-x86_64-linux)
       racc (~> 1.4)
+    pagy (5.8.1)
     pg (1.2.3)
     puma (5.5.2)
       nio4r (~> 2.0)
@@ -167,6 +168,7 @@ DEPENDENCIES
   ancestry
   bootsnap
   debug
+  pagy (~> 5.8)
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.1)
@@ -176,4 +178,4 @@ RUBY VERSION
    ruby 3.1.0p0
 
 BUNDLED WITH
-   2.2.3
+   2.3.3

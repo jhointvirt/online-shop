@@ -1,6 +1,6 @@
 class ItemController < ApplicationController
   def index
-    render json: Item.all, status: 200
+    render json: pagy(Item.all, items: params[:items_count]), status: 200
   end
 
   def show
@@ -11,10 +11,10 @@ class ItemController < ApplicationController
     categories = Category.find(params[:category_id]).descendant_ids
     items = Item.where(category_id: params[:category_id])
     if categories
-      items = items + Item.where(category_id: categories)
+      items = Item.where(category_id: categories).or(items)
     end
 
-    render json: items, status: 200
+    render json: pagy(items, items: params[:items_count]), status: 200
   end
 
   def create
