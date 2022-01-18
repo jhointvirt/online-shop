@@ -1,5 +1,5 @@
 class Api::V1::ProductController < ApplicationController
-  before_action :authorized, except: %i[index, show, products_by_category]
+  before_action :admin?, only: [:create, :update, :destroy]
 
   def index
     render json: pagy(Product.all, items: params[:products_count]), status: 200

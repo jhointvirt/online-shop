@@ -37,4 +37,10 @@ class ApplicationController < ActionController::API
       render json: { message: 'Please log in' }, status: :unauthorized
     end
   end
+
+  def admin?
+    if !logged_in? || (logged_in? && !@user.is_admin)
+      render json: { message: 'Access denied' }, status: 403
+    end
+  end
 end

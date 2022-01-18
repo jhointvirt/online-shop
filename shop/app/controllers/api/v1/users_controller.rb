@@ -1,7 +1,7 @@
 require "base64"
 
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :authorized, only: [:create]
+  before_action :authorized, only: [:profile]
 
   def profile
     render json: { user: UserSerializer.new(current_user) }, status: :accepted
@@ -21,7 +21,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :username, :password)
+    params.require(:user).permit(:email, :username, :password, :is_admin)
   end
 
   def refresh_token_params

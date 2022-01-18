@@ -1,4 +1,5 @@
 class Api::V1::ReviewController < ApplicationController
+  before_action :authorized, only: [:create, :update, :destroy]
   def index
     render json: Review.where(product_id: params[:product_id])
   end
