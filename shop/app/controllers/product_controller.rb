@@ -1,24 +1,24 @@
-class ItemController < ApplicationController
+class ProductController < ApplicationController
   def index
-    render json: pagy(Item.all, items: params[:items_count]), status: 200
+    render json: pagy(Product.all, items: params[:products_count]), status: 200
   end
 
   def show
-    render json: Item.find(params[:id]), status: 200
+    render json: Product.find(params[:id]), status: 200
   end
 
-  def items_by_category
+  def products_by_category
     categories = Category.find(params[:category_id]).descendant_ids
-    items = Item.where(category_id: params[:category_id])
+    products = Product.where(category_id: params[:category_id])
     if categories
-      items = Item.where(category_id: categories).or(items)
+      products = Product.where(category_id: categories).or(products)
     end
 
-    render json: pagy(items, items: params[:items_count]), status: 200
+    render json: pagy(products, items: params[:products_count]), status: 200
   end
 
   def create
-    item = Item.new(item_params)
+    item = Product.new(item_params)
     if item.save
       render json: { message: 'Create success', result: item }, status: 201
     else
@@ -27,9 +27,9 @@ class ItemController < ApplicationController
   end
 
   def update
-    item = Item.find(params[:id])
+    item = Product.find(params[:id])
     unless item
-      render json: { message: 'Item cannot find' }, status: 404
+      render json: { message: 'Product cannot find' }, status: 404
     end
 
     result = item.update(item_params)
@@ -41,7 +41,7 @@ class ItemController < ApplicationController
   end
 
   def destroy
-    result = Item.delete(params[:id])
+    result = Product.delete(params[:id])
     if result
       render json: { message: 'Delete success', result: result }, status: 200
     else
@@ -52,6 +52,6 @@ class ItemController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:title, :description, :price, :category_id)
+    params.require(:product).permit(:title, :description, :price, :category_id)
   end
 end

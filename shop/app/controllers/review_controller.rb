@@ -1,6 +1,6 @@
 class ReviewController < ApplicationController
   def index
-    render json: Review.where(item_id: params[:item_id])
+    render json: Review.where(product_id: params[:product_id])
   end
 
   def create
@@ -38,6 +38,6 @@ class ReviewController < ApplicationController
   private
 
   def review_params
-    params.require(:review).permit(:rating, :description, :item_id)
+    params.require(:review).permit(:rating, :description, :product_id)
   end
 end
