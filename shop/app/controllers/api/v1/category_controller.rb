@@ -1,4 +1,4 @@
-class CategoryController < ApplicationController
+class Api::V1::CategoryController < ApplicationController
   def index
     render json: Category.where(ancestry: nil), status: 200
   end

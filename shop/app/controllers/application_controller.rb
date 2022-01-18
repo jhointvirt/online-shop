@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::API
-  before_action :authorized
-
   include Pagy::Backend
   Pagy::DEFAULT[:items] = 25
 

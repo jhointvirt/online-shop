@@ -1,4 +1,4 @@
-class ReviewController < ApplicationController
+class Api::V1::ReviewController < ApplicationController
   def index
     render json: Review.where(product_id: params[:product_id])
   end
