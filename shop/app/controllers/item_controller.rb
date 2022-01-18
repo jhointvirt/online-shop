@@ -22,7 +22,7 @@ class ItemController < ApplicationController
     if item.save
       render json: { message: 'Create success', result: item }, status: 201
     else
-      render json: { result: item }, status: 400
+      render json: { result: item.errors }, status: 400
     end
   end
 
@@ -36,7 +36,7 @@ class ItemController < ApplicationController
     if result
       render json: { message: 'Update success', result: result }, status: 200
     else
-      render json: { result: result }, status: 400
+      render json: { result: result.errors }, status: 400
     end
   end
 
