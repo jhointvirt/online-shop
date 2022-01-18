@@ -5,7 +5,7 @@ class Api::V1::ReviewController < ApplicationController
   end
 
   def create
-    review = Review.new(review_params)
+    review = current_user.reviews.new(review_params)
     if review.save
       render json: { message: 'Create success', result: review }, status: 201
     else
@@ -19,20 +19,29 @@ class Api::V1::ReviewController < ApplicationController
       render json: { message: 'Review cannot find' }, status: 404
     end
 
-    result = review.update(review_params)
-    if result
-      render json: { message: 'Update success', result: result }, status: 200
+    if review.user_id == current_user.id
+      result = review.update(review_params)
+      if result
+        render json: { message: 'Update success', result: result }, status: 200
+      else
+        render json: { result: result.errors }, status: 400
+      end
     else
-      render json: { result: result.errors }, status: 400
+        render json: { message: 'Access denied' }, status: 403
     end
   end
 
   def destroy
-    result = Review.delete(params[:id])
-    if result
-      render json: { message: 'Delete success', result: result }, status: 200
+    review = Review.find(params[:id])
+    if current_user.is_admin || review.user_id == current_user.id
+      result = Review.delete(params[:id])
+      if result
+        render json: { message: 'Delete success', result: result }, status: 200
+      else
+        render json: { result: result }, status: 400
+      end
     else
-      render json: { result: result }, status: 400
+      render json: { message: 'Access denied' }, status: 403
     end
   end
 
