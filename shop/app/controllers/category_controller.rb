@@ -1,10 +1,10 @@
 class CategoryController < ApplicationController
   def index
-    render json: Category.where(ancestry: nil)
+    render json: Category.where(ancestry: nil), status: 200
   end
 
   def show
-    render json: Category.find(params[:id]).children
+    render json: Category.find(params[:id]).children, status: 200
   end
 
   def create
