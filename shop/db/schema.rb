@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_105713) do
+ActiveRecord::Schema.define(version: 2022_01_18_140709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 2022_01_18_105713) do
     t.index ["category_id"], name: "index_products_on_category_id"
   end
 
+  create_table "refresh_tokens", force: :cascade do |t|
+    t.string "refresh_token", null: false
+    t.datetime "expiry_time", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
+  end
+
   create_table "reviews", force: :cascade do |t|
     t.integer "rating"
     t.text "description"
@@ -42,6 +51,15 @@ ActiveRecord::Schema.define(version: 2022_01_18_105713) do
     t.index ["product_id"], name: "index_reviews_on_product_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "username"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   add_foreign_key "products", "categories"
+  add_foreign_key "refresh_tokens", "users"
   add_foreign_key "reviews", "products"
 end

@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      resources :users, only: [:create]
+      post 'auth/login', to: 'auth#login'
+      post 'auth/refresh', to: 'auth#refresh'
+      get 'user/profile', to: 'users#profile'
+    end
+  end
   scope(:path => '/api') do
     resources :category, :product, :review
     get 'review/all/:item_id', to: 'review#index'
