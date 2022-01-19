@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_183250) do
+ActiveRecord::Schema.define(version: 2022_01_19_162427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "categories", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "ancestry"
@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_183250) do
   end
 
   create_table "reviews", force: :cascade do |t|
-    t.integer "rating"
-    t.text "description"
+    t.integer "rating", null: false
+    t.text "description", null: false
     t.bigint "product_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(version: 2022_01_18_183250) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email"
-    t.string "username"
-    t.string "password_digest"
+    t.string "email", null: false
+    t.string "username", null: false
+    t.string "password_digest", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "is_admin"
