@@ -8,6 +8,9 @@ gem "puma", "~> 5.0"
 gem "pagy", "~> 5.8"
 gem "sidekiq", "~> 6.3.1"
 gem 'redis', "~> 4.0"
+gem 'whenever'
+gem "jwt", "~> 2.3"
+gem "active_model_serializers", "~> 0.10.13"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -40,6 +43,3 @@ group :development do
 end
 
 
-gem "jwt", "~> 2.3"
-
-gem "active_model_serializers", "~> 0.10.13"
