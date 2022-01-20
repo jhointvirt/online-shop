@@ -8,9 +8,11 @@ class Api::V1::CategoryController < ApplicationController
   end
 
   def create
-    category = Category.find(params[:ancestry])
-    if category
-      params[:category][:ancestry] = "#{category.ancestry}/#{params[:ancestry]}"
+    unless params[:ancestry] == nil
+      category = Category.find(params[:ancestry])
+      if category
+        params[:category][:ancestry] = "#{category.ancestry}/#{params[:ancestry]}"
+      end
     end
 
     category = Category.new(category_params)

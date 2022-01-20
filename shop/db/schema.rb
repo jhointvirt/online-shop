@@ -10,10 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_19_162427) do
+ActiveRecord::Schema.define(version: 2022_01_20_160853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "basket_products", force: :cascade do |t|
+    t.bigint "basket_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["basket_id"], name: "index_basket_products_on_basket_id"
+    t.index ["product_id"], name: "index_basket_products_on_product_id"
+  end
+
+  create_table "baskets", force: :cascade do |t|
+    t.integer "discount", default: 0, null: false
+    t.integer "product_quantity", default: 0, null: false
+    t.decimal "total_price", default: "0.0", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_baskets_on_user_id"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "title", null: false
@@ -62,6 +81,7 @@ ActiveRecord::Schema.define(version: 2022_01_19_162427) do
     t.boolean "is_admin"
   end
 
+  add_foreign_key "baskets", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "refresh_tokens", "users"
   add_foreign_key "reviews", "products"
