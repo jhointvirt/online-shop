@@ -1,46 +1,32 @@
 require "base64"
 
 class Api::V1::AuthController < ApplicationController
-  def login
-    @user = User.find_by_email(params[:email])
-    if @user && @user.authenticate(params[:password])
-      access_token = encode_token({ user_id: @user.id, expiry_time: Time.now + 24.hours.to_i })
-      refresh_token = Base64.encode64(access_token)
+  def initialize
+    super
+    @auth_services = AuthenticationService.new
+  end
 
-      token = RefreshToken.find_by(user_id: @user.id)
-      if token
-        RefreshToken.update(refresh_token: refresh_token, expiry_time: Time.now + 31.days.to_i, user_id: @user.id)
-      else
-        RefreshToken.create(refresh_token: refresh_token, expiry_time: Time.now + 31.days.to_i, user_id: @user.id)
-      end
-      render json: { user: UserSerializer.new(@user), access_token: access_token, refresh_token: refresh_token }, status: :ok
+  def login
+    result = @auth_services.login(user_login_params)
+    if result[:success]
+      render json: result, status: :ok
     else
-      render json: { message: 'Invalid email or password', }, status: :unauthorized
+      render json: result[:message], status: :not_found
     end
   end
 
   def refresh
-    decode = decoded_token
-    unless decode
-      render json: { is_refresh: false, access_token: auth_header }
+    result = @auth_services.refresh(params, auth_header)
+    if result[:is_refresh]
+      render json: { is_refresh: true, access_token: result[:access_token], refresh_token: result[:refresh_token], expiry_time: Time.now + 24.hours.to_i }, status: :ok
+    else
+      render json: { is_refresh: false, access_token: auth_header }, status: :bad_request
     end
-
-    token = RefreshToken.find_by(user_id: decode[0]['user_id'])
-    if token.refresh_token != params[:refresh_token] || token.expiry_time < Time.now
-      render json: { is_refresh: false, access_token: auth_header }
-    end
-
-    access_token = encode_token({user_id: decode[0]['user_id'], expiry_time: Time.now + 24.hours.to_i})
-    refresh_token = Base64.encode64(access_token)
-
-    RefreshToken.update(refresh_token: refresh_token, expiry_time: Time.now + 31.days.to_i, user_id: decode[0]['user_id'])
-
-    render json: { is_refresh: true, access_token: access_token, refresh_token: refresh_token, expiry_time: Time.now + 24.hours.to_i }, status: :ok
   end
 
   private
 
   def user_login_params
-    params.require(:user).permit(:email, :password)
+    params.permit(:email, :password)
   end
 end

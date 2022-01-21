@@ -2,28 +2,13 @@ class ApplicationController < ActionController::API
   include Pagy::Backend
   Pagy::DEFAULT[:items] = 25
 
-  def encode_token(payload)
-    JWT.encode(payload, 'wi5i2358g9se85j320khgdg4')
-  end
-
   def auth_header
     request.headers['Authorization']
   end
 
-  def decoded_token
-    if auth_header
-      token = auth_header.split(' ')[1]
-      begin
-        JWT.decode(token, 'wi5i2358g9se85j320khgdg4', true, algorithm: 'HS256')
-      rescue JWT::DecodeError
-        nil
-      end
-    end
-  end
-
   def current_user
-    if decoded_token
-      user_id = decoded_token[0]['user_id']
+    if JsonWebToken.decoded_token(request.headers['Authorization'])
+      user_id = JsonWebToken.decoded_token(request.headers['Authorization'])[0]['user_id']
       @user = User.find_by(id: user_id)
     end
   end

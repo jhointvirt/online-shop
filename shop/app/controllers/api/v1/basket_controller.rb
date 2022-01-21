@@ -1,4 +1,9 @@
 class Api::V1::BasketController < ApplicationController
+  def initialize
+    super
+    @basket_service = BasketService.new
+  end
+
   def show
     render json: Basket.where(user_id: params[:user_id]).first
   end
@@ -8,15 +13,7 @@ class Api::V1::BasketController < ApplicationController
       render json: { message: 'product_id cannot be null' }, status: :not_found
     end
 
-    @product = Product.find(params[:product_id])
-    @basket = get_user_basket
-
-    if @basket
-      @basket_product = @basket.basket_product.create(:product => @product)
-    else
-      @basket = current_user.create_basket(product_quantity: 1, total_price: @product.price)
-      @basket_product = @basket.basket_product.create(:product => @product)
-    end
+    @basket_product = @basket_service.add_to_basket(params, current_user)
 
     if @basket_product
       render json: { message: 'Add success', result: @basket_product }, status: 201
