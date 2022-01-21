@@ -33,10 +33,14 @@ class Api::V1::BasketController < ApplicationController
     @result = BasketProduct.where(product_id: params[:product_ids]).where(basket_id: get_user_basket.id).delete_all
 
     if @result
-      render json: { message: 'Success delete' , count: @result }, status: 200
+      render json: { message: 'Success delete' , count: @result }, status: :ok
     else
       render json: { message: @result.errors }, status: 400
     end
+  end
+
+  def basket_count
+    render json: BasketProduct.where(basket_id: get_user_basket.id).count, status: :ok
   end
 
   private

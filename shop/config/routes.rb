@@ -10,11 +10,12 @@ Rails.application.routes.draw do
       post 'auth/refresh', to: 'auth#refresh'
       post 'basket', to: 'basket#add_to_basket'
 
-      get 'basket/:user_id', to: 'basket#show'
       get 'user/profile', to: 'users#profile'
       get 'review/all/:product_id', to: 'review#index'
       get 'product/all/:products_count', to: 'product#index'
       get 'product/products_by_category/:category_id/:products_count', to: 'product#products_by_category'
+      get 'basket/count', to: 'basket#basket_count'
+      get 'basket/show/:user_id', to: 'basket#show'
 
       delete 'basket', to: 'basket#remove_from_basket'
     end
