@@ -1,0 +1,1 @@
+Rails.application.config.session_store :cookie_store, key: '_online_shop', expire_after: 14.days

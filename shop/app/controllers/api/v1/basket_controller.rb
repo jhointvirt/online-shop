@@ -5,15 +5,19 @@ class Api::V1::BasketController < ApplicationController
   end
 
   def show
-    render json: Basket.where(user_id: params[:user_id]).first
+    if current_user
+      render json: get_user_basket, status: :ok
+    else
+      render json: session[:basket], status: :ok
+    end
   end
 
   def add_to_basket
     if params[:product_id] == nil
-      render json: { message: 'product_id cannot be null' }, status: :not_found
+      render json: { message: 'product id cannot be null' }, status: :not_found
     end
 
-    @basket_product = @basket_service.add_to_basket(params, current_user)
+    @basket_product = @basket_service.add_to_basket(params, current_user, session)
 
     if @basket_product
       render json: { message: 'Add success', result: @basket_product }, status: 201
@@ -23,21 +27,25 @@ class Api::V1::BasketController < ApplicationController
   end
 
   def remove_from_basket
-    if params[:product_ids] == nil
+    if params[:product_id] == nil
       render json: { message: 'product_ids cannot be null' }, status: :not_found
     end
 
-    @result = BasketProduct.where(product_id: params[:product_ids]).where(basket_id: get_user_basket.id).delete_all
+    @result = @basket_service.remove(params, current_user, session)
 
     if @result
-      render json: { message: 'Success delete' , count: @result }, status: :ok
+      render json: { message: 'Success delete' , data: @result }, status: :ok
     else
-      render json: { message: @result.errors }, status: 400
+      render json: { message: @result }, status: 400
     end
   end
 
   def basket_count
-    render json: BasketProduct.where(basket_id: get_user_basket.id).count, status: :ok
+    if current_user
+      render json: BasketProduct.where(basket_id: get_user_basket.id).count, status: :ok
+    else
+      session[:basket].count
+    end
   end
 
   private

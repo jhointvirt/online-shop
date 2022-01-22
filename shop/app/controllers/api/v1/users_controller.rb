@@ -10,9 +10,12 @@ class Api::V1::UsersController < ApplicationController
   def create
     @user = User.create(user_params)
     if @user.valid?
-      @token = encode_token(user_id: @user.id)
+      @token = JsonWebToken.encode_token(user_id: @user.id)
       @refresh_token = RefreshToken.create({ refresh_token: Base64.encode64(@token), expiry_time: Time.now + 31.days.to_i, user_id: @user.id })
+      @user.create_basket(product_quantity: 0, total_price: 0)
+
       SendRegisterEmailJob.perform_later(@user.email)
+
       render json: { user: UserSerializer.new(@user), access_token: @token, refresh_token: @refresh_token }, status: :created
     else
       render json: { error: 'failed to create user', custom: @user.errors }, status: :unprocessable_entity
