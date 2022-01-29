@@ -4,8 +4,8 @@ require 'faker'
 RSpec.describe User, type: :model do
   before(:each) do
     @user = User.new
-    @user.email = Faker::Internet.email
-    @user.username = Faker::Internet.username
+    @user.email = 'new_test@gmail.com'
+    @user.username = 'new_test_username'
     @user.password = 'ToStr0nGPa$$w0rD'
   end
 
@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
     @user.save
     @user = User.new
     @user.email = 'new_test@gmail.com'
-    @user.username = 'test_username'
+    @user.username = 'new_test_username'
     @user.password = 'ToStr0nGPa$$w0rD'
     expect(@user).to_not be_valid
   end
@@ -59,7 +59,7 @@ RSpec.describe User, type: :model do
   it 'is not valid with duplicate email' do
     @user.save
     @user = User.new
-    @user.email = 'test@gmail.com'
+    @user.email = 'new_test@gmail.com'
     @user.username = 'new_test_username'
     @user.password = 'ToStr0nGPa$$w0rD'
     expect(@user).to_not be_valid

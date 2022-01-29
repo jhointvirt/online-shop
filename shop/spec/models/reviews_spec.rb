@@ -5,7 +5,7 @@ RSpec.describe Review, type: :model do
   before(:each) do
     @user = User.create(email: Faker::Internet.email, username: Faker::Internet.username, password: 'ToStr0nGPa$$w0rD')
     @category = Category.create(title: 'Car')
-    @product = Product.create(title: 'BMV', description: 'Good', price: 220.0, category: @category)
+    @product = Product.create(title: 'BMW', description: 'Good', price: 220.0, category: @category)
 
     @review = Review.new
     @review.rating = 5

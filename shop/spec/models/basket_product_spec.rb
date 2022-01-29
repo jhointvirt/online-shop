@@ -5,7 +5,7 @@ RSpec.describe BasketProduct, type: :model do
     @user = User.create(email: Faker::Internet.email, username: Faker::Internet.username, password: 'ToStr0nGPa$$w0rD')
 
     @basket = Basket.create(user: @user)
-    @product = Product.create(title: 'BMV', description: 'Good', price: 220.0, category: @category)
+    @product = Product.create(title: 'BMW', description: 'Good', price: 220.0, category: @category)
 
     @basket_product = BasketProduct.new
     @basket_product.basket = @basket

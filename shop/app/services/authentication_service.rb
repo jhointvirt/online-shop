@@ -20,12 +20,12 @@ class AuthenticationService
   def refresh (params, access_token)
     decode = JsonWebToken.decoded_token(access_token)
     unless decode
-       { is_refresh: false, access_token: access_token }
+      return { is_refresh: false, access_token: access_token }
     end
 
     token = RefreshToken.find_by(user_id: decode[0]['user_id'])
     if token.refresh_token != params[:refresh_token] || token.expiry_time < Time.now
-      { is_refresh: false, access_token: access_token }
+      return { is_refresh: false, access_token: access_token }
     end
 
     access_token = JsonWebToken.encode_token({user_id: decode[0]['user_id'], expiry_time: Time.now + 2.hours.to_i})

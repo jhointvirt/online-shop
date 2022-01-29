@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Basket, type: :model do
   before(:each) do
-    @user = User.create(email: 'test@gmail.com', username: Faker::Internet.username, password: 'ToStr0nGPa$$w0rD')
+    @user = User.create(email: Faker::Internet.email, username: Faker::Internet.username, password: 'ToStr0nGPa$$w0rD')
 
     @basket = Basket.new
     @basket.user = @user
