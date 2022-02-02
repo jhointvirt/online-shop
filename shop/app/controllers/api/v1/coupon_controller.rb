@@ -45,6 +45,10 @@ class Api::V1::CouponController < ApplicationController
       render json: { message: 'Coupon cannot find' }, status: 404
     end
 
+    if @coupon.expiration_date < Time.now
+      render json: { message: 'Expiration date less the now' }, status: 400
+    end
+
     result = @coupon.update_attribute(:used_count, @coupon.used_count + 1)
     if result
       render json: { message: 'Count add + 1', result: result }, status: 200
@@ -56,6 +60,6 @@ class Api::V1::CouponController < ApplicationController
   private
 
   def coupon_params
-    params.require(:coupon).permit(:code, :discount, :used_count)
+    params.require(:coupon).permit(:code, :discount, :used_count, :expiration_date)
   end
 end
