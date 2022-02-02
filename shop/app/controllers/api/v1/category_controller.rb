@@ -1,4 +1,6 @@
 class Api::V1::CategoryController < ApplicationController
+  before_action :admin?, only: [:create, :update, :destroy]
+
   def index
     render json: Category.where(ancestry: nil), status: 200
   end

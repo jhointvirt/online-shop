@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_20_160853) do
+ActiveRecord::Schema.define(version: 2022_02_02_180757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_160853) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "coupon_id"
+    t.index ["coupon_id"], name: "index_baskets_on_coupon_id"
     t.index ["user_id"], name: "index_baskets_on_user_id"
   end
 
@@ -40,6 +42,14 @@ ActiveRecord::Schema.define(version: 2022_01_20_160853) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "ancestry"
     t.index ["ancestry"], name: "index_categories_on_ancestry"
+  end
+
+  create_table "coupons", force: :cascade do |t|
+    t.string "code", null: false
+    t.integer "discount", null: false
+    t.integer "used_count", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "products", force: :cascade do |t|
@@ -81,6 +91,7 @@ ActiveRecord::Schema.define(version: 2022_01_20_160853) do
     t.boolean "is_admin"
   end
 
+  add_foreign_key "baskets", "coupons"
   add_foreign_key "baskets", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "refresh_tokens", "users"

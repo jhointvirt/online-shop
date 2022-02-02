@@ -24,11 +24,10 @@ class BasketService
       products
     else
       index = 0 # need more good way
-      count = 0
       session[:basket].each do |i|
-        if i['id'] == params[:product_id] && count == 0
+        if i['id'] == params[:product_id]
           session[:basket].delete_at(index)
-          count = count + 1
+          break
         end
         index = index + 1
       end
