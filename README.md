@@ -4,8 +4,8 @@
 Change credentials in config/database.yml to another
 
 ```
-username: egor_admin
-password: Aa23680!1
+username: username
+password: Strong_Password_#!1
 host: localhost
 port: 5433
 ```
